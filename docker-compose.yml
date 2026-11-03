@@ -1,0 +1,53 @@
+services:
+
+  # ================================================
+  # BACKEND
+  # ================================================
+
+  backend:
+
+    build:
+      context: ./backend
+
+    container_name: researchrag-backend
+
+    ports:
+      - "8000:8000"
+
+    environment:
+
+      QDRANT_URL:
+        http://host.docker.internal:6333
+
+      OPENROUTER_API_KEY:
+        ${OPENROUTER_API_KEY}
+
+    volumes:
+      - uploads_data:/app/uploads
+
+
+  # ================================================
+  # FRONTEND
+  # ================================================
+
+  frontend:
+
+    build:
+      context: ./frontend
+
+    container_name: researchrag-frontend
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      - backend
+
+
+# ==================================================
+# VOLUMES
+# ==================================================
+
+volumes:
+
+  uploads_data:
